@@ -1,0 +1,25 @@
+From de0dc428713619bb2cf2dd4274688c6dfe449f05 Mon Sep 17 00:00:00 2001
+From: Ajit Kumar <stack.ajit@gmail.com>
+Date: Sun, 29 Sep 2024 01:49:20 +0530
+Subject: [PATCH] updated price
+
+---
+ client3.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/client3.py b/client3.py
+index c223a27..2774bde 100644
+--- a/client3.py
++++ b/client3.py
+@@ -58,7 +58,7 @@ if __name__ == "__main__":
+         quotes = json.loads(urllib.request.urlopen(QUERY.format(random.random())).read())
+ 
+         """ ----------- Update to get the ratio --------------- """
+-        prices {}
++        prices={}
+         for quote in quotes:
+             stock, bid_price, ask_price, price = getDataPoint(quote)
+             prices[stock]=price
+-- 
+2.46.0.windows.1
+
