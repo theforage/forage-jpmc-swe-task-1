@@ -19,7 +19,6 @@
 #  DEALINGS IN THE SOFTWARE.
 
 import csv
-# from BaseHTTPServer import BaseHTTPRequestHandler,HTTPServer
 import http.server
 import json
 import operator
@@ -27,7 +26,6 @@ import os.path
 import re
 import threading
 from datetime import timedelta, datetime
-# from itertools import izip
 from random import normalvariate, random
 from socketserver import ThreadingMixIn
 
@@ -52,7 +50,6 @@ FREQ = (12, 36, 50)
 # Trades
 
 OVERLAP = 4
-
 
 ################################################################################
 #
@@ -148,7 +145,7 @@ def order_book(orders, book, stock_name):
 
 def generate_csv():
     """ Generate a CSV of order history. """
-    with open('test.csv', 'wb') as f:
+    with open('test.csv', 'w') as f:  # Fixed file mode from 'wb' to 'w'
         writer = csv.writer(f)
         for t, stock, side, order, size in orders(market()):
             if t > MARKET_OPEN + SIM_LENGTH:
@@ -269,8 +266,8 @@ class App(object):
             if REALTIME:
                 while t > self._sim_start + (datetime.now() - self._rt_start):
                     yield t, bids, asks
-            else:
-                yield t, bids, asks
+           
+
 
     @property
     def _current_book_2(self):
