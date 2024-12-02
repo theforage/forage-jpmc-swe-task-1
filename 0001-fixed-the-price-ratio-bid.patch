@@ -1,0 +1,141 @@
+ From 5ab7dfc50f35bf04e2ffd734c6e49d44e5ac8c2a Mon Sep 17 00:00:00 2001
+From: Kelechukwu Tasie <ktasie@gmail.com>
+Date: Tue, 24 Sep 2024 02:39:39 +0100
+Subject: [PATCH] fixed the price ratio, bid
+
+---
+ .gitignore | 81 ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ client3.py | 15 ++++++++--
+ 2 files changed, 93 insertions(+), 3 deletions(-)
+ create mode 100644 .gitignore
+
+diff --git a/.gitignore b/.gitignore
+new file mode 100644
+index 0000000..d7bb5e3
+--- /dev/null
++++ b/.gitignore
+@@ -0,0 +1,81 @@
++# Byte-compiled / optimized / DLL files
++__pycache__/
++*.py[cod]
++*$py.class
++
++# C extensions
++*.so
++
++# Distribution / packaging
++.Python
++env/
++venv/
++ENV/
++env.bak/
++venv.bak/
++bin/
++build/
++develop-eggs/
++dist/
++eggs/
++lib/
++lib64/
++parts/
++sdist/
++var/
++wheels/
++*.egg-info/
++.installed.cfg
++*.egg
++MANIFEST
++
++# PyInstaller
++# Usually these files are written by a python script from a template
++# before PyInstaller builds the binary
++*.manifest
++*.spec
++
++# Installer logs
++pip-log.txt
++pip-delete-this-directory.txt
++
++# Unit test / coverage reports
++htmlcov/
++.tox/
++.nox/
++.coverage
++.coverage.*
++.cache
++nosetests.xml
++coverage.xml
++*.cover
++*.py,cover
++.hypothesis/
++
++# Jupyter Notebook
++.ipynb_checkpoints
++
++# pyenv
++.python-version
++
++# PEP 582; used by e.g. github.com/David-OConnor/pyflow
++__pypackages__/
++
++# Celery
++celerybeat-schedule
++celerybeat.pid
++
++# SageMath parsed files
++*.sage.py
++
++# Environments
++.env
++.venv
++env/
++venv/
++ENV/
++env.bak/
++venv.bak/
++
++# Spyder project settings
++.spyder
+diff --git a/client3.py b/client3.py
+index 3fc09b7..163c8ff 100644
+--- a/client3.py
++++ b/client3.py
+@@ -35,14 +35,19 @@ def getDataPoint(quote):
+     stock = quote['stock']
+     bid_price = float(quote['top_bid']['price'])
+     ask_price = float(quote['top_ask']['price'])
+-    price = bid_price
++    ##price = bid_price
++    price = (bid_price + ask_price)/2
+     return stock, bid_price, ask_price, price
+ 
+ 
+ def getRatio(price_a, price_b):
+     """ Get ratio of price_a and price_b """
+     """ ------------- Update this function ------------- """
+-    return 1
++    #return 1.
++    if(price_b == 0):
++        # when price_b is 0 avoid throwing ZeroDivisionError
++        return
++    return price_a/price_b
+ 
+ 
+ # Main
+@@ -52,8 +57,12 @@ if __name__ == "__main__":
+         quotes = json.loads(urllib.request.urlopen(QUERY.format(random.random())).read())
+ 
+         """ ----------- Update to get the ratio --------------- """
++        prices = {}
+         for quote in quotes:
+             stock, bid_price, ask_price, price = getDataPoint(quote)
++            prices[stock] = price
+             print("Quoted %s at (bid:%s, ask:%s, price:%s)" % (stock, bid_price, ask_price, price))
+ 
+-        print("Ratio %s" % getRatio(price, price))
++        ##print("Ratio %s" % getRatio(price, price))
++        print("Ratio %s" % getRatio(prices["ABC"], prices["DEF"]))
++        
+-- 
+2.43.0.windows.1
+
